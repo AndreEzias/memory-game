@@ -1,7 +1,7 @@
 import Image from "./Image.js"
 
 class Card {
-    backImagePath = '/images/card back red.png'
+    backImagePath = '/images/card_back_red.png'
     image = null
     element = null
 
