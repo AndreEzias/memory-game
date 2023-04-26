@@ -1,36 +1,66 @@
 import Card from "./components/Card.js";
 import apiImages from "./services/api-images.js";
+import Counter from "./components/Counter.js";
+import StartingTime from "./components/StartingTime.js";
 
 class Game {
     
-    constructor() {
-        this.element = document.querySelector('#game');
+    constructor(element) {
+        this.element = element;
+        this.score = new Counter(document.querySelector('#score'));
+        this.attempts = new Counter(document.querySelector('#attempts'));
+        this.startingTime = new StartingTime(document.querySelector('#startingTimer'));
+        this.loseEvent = new Event('lose');
+        this.winEvent = new Event('win');
+        this.startingTime.hide();
     }
 
+    score= null;
+    attempts = null
     cards = []
     element = null
     imageService = apiImages
     quantidade = null
     tema = null
 
+    listenWinEvent(callback) {
+        this.element.addEventListener('win', callback)
+    }
+
+    listenLoseEvent(callback) {
+        this.element.addEventListener('lose', callback)
+    }
+
     start(quantidade, tema) {
-        this.element = document.querySelector('#game');
         this.quantidade = quantidade
         this.tema = tema
         this.removeCards()
         this.populateCards()
-        this.resetScore()
+
+        this.startingTime.show()
+        this.startingTime.countdown(quantidade)
+
+        this.startingTime.listenEndEvent(() => {
+            this.flipAllCardToBack()
+            this.startingTime.hide()
+        })
+        
+        this.score.reset()
+        this.attempts.set(quantidade)
     }
 
     populateCards() {
-        const images = []
         const cards = []
         
-        this.imageService.getImages(this.tema, this.quantidade).then(images => {
+        apiImages.getImages(this.tema, this.quantidade).then(images => {
             images.photos.forEach(image => {
                 const src = image.src.portrait
-                cards.push(new Card(src))
-                cards.push(new Card(src))
+                const card1 = new Card(src)
+                const card2 = new Card(src)
+                card1.flipToFront()
+                card2.flipToFront()
+                cards.push(card1)
+                cards.push(card2)
             })
             this.cards = this.randomizeCards(cards)
             this.appendChildCards();
@@ -52,31 +82,20 @@ class Game {
     // create a method to flip all cards
     flipAllCards() {
         this.cards.forEach(card => {
-            if (card.isFliped() && !card.isMatched()) {
-                card.flipCard()
+            if (card.isFliped && !card.isMatched) {
+                card.flipToBack()
             }
         })
     }
 
-    // create a method to check if 2 cards are flipped
-    checkIfTwoCardsAreFlipped() {
-        const flipeds = this.cards.filter(card => card.isFliped() && !card.isMatched())
-        const [ firstCard, secondCard ] = flipeds
-        if (flipeds.length > 2) {
-            this.flipAllCards()
-        }
-
-        if (flipeds.length === 2) {
-            if (firstCard.frontImage === secondCard.frontImage) {
-                firstCard.addClass('card--matched')
-                secondCard.addClass('card--matched')
-                this.updateScore()
-            } else {
-                setTimeout(() => {
-                    this.flipAllCards()
-                }, 1000)
-            }
-        }
+    flipAllCardToBack() {
+        this.cards.forEach(card => {
+            card.flipToBack()
+        })
+    }
+    
+    getCardsFliped() {
+        return this.cards.filter(card => card.isFliped && !card.isMatched)
     }
 
     randomizeCards(cards) {
@@ -86,28 +105,43 @@ class Game {
     // listen a flip event on each card
     listenFlipEvent() {
         this.cards.forEach(card => {
-            card.addFlipListener(() => this.checkIfTwoCardsAreFlipped())
+            card.addFlipListener(() => {
+                const flipeds = this.getCardsFliped()
+
+                if (flipeds.length > 2) {
+                    this.flipAllCards()
+                    this.attempts.sub(1)
+                    return
+                }
+
+                if (flipeds.length === 2) {
+                    const [ firstCard, secondCard ] = flipeds
+                    if (firstCard.frontImage === secondCard.frontImage) {
+                        firstCard.setMatched(true)
+                        secondCard.setMatched(true)
+                        this.score.add(1)
+                        this.attempts.add(2)
+                    } else {
+                        this.attempts.sub(1)
+                    }
+
+                    setTimeout(() => this.flipAllCards(), 1000)
+                }
+
+
+                this.attempts.get() === 0
+                    ? this.element.dispatchEvent(this.loseEvent)
+                    : null
+
+                this.score.get() == this.quantidade 
+                    ? this.element.dispatchEvent(this.winEvent) 
+                    : null
+            })
         })
     }
 
-    // create a method to remove cards
     removeCards() {
         this.element.innerHTML = ''
-    }
-
-    updateScore() {
-        const score = this.cards.filter(card => card.isMatched()).length
-        const scoreElement = document.querySelector('#score')
-        scoreElement.innerHTML = score / 2
-    }
-
-    resetScore() {
-        const scoreElement = document.querySelector('#score')
-        scoreElement.innerHTML = 0
-    }
-
-    getScore() {
-        return document.querySelector('#score').innerHTML
     }
 }
 
