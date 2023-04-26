@@ -5,6 +5,9 @@ Se tiver node.js instalado basta rodar o seguinte comando na pasta raiz do proje
 
 `npx http-server`
 
+Exemplo online:
+[Memory Game](https://andreezias.github.io/memory-game/game.html)
+
 ## Tecnologias
 
 
