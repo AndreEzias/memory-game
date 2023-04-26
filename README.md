@@ -1,28 +1,20 @@
 # Memory Game
+### Jogo da memória criado com javascript, html e css.
 
-<p>
-Jogo da memória criado com javascript, html e css.
-</p>
+Se tiver node.js instalado basta rodar o seguinte comando na pasta raiz do projeto:
 
-<div>
-<a href="https://github.com/AndreEzias">
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AndreEzias&layout=compact&langs_count=7&theme=dracula"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=AndreEzias&show_icons=true&theme=dracula&include_all_commits=true&count_private=true"/>
-</div>
-
+`npx http-server`
 
 ## Tecnologias
 
 
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width=40 />
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width=40 />
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width=40 />
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width=40 />
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width=40 />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width=60 /><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width=60 /><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width=60 /><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" width=60 /><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width=60 />
 
 ___
-## By André Ezías 
-<img src="images/author.png" width=40 />
+## Autor
+[<img src="images/author.png" width=60 /><br><sub>André Ezías</sub>](https://github.com/AndreEzias/)
+
+![André's GitHub stats](https://github-readme-stats.vercel.app/api?username=AndreEzias&show_icons=true&theme=dracula)
 
 ## Contatos
 
